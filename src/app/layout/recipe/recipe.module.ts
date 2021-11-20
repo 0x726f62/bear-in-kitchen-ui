@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HttpClientJsonpModule, HttpClientModule} from '@angular/common/http';
 
 import {ShareButtonsModule} from 'ngx-sharebuttons/buttons';
+import {ShareIconsModule} from 'ngx-sharebuttons/icons';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {RecipeRoutingModule} from './recipe-routing.module';
 import {RecipeComponent} from './recipe.component';
@@ -20,7 +21,8 @@ import {RecipePhotoComponent} from './components/recipePhoto/recipePhoto.compone
     NgbModule,
     HttpClientModule, // (Required) for share counts
     HttpClientJsonpModule, // (Optional) For linkedIn & Tumblr counts
-    ShareButtonsModule
+    ShareButtonsModule,
+    ShareIconsModule
   ],
   declarations: [
     RecipeComponent,
