@@ -7,8 +7,8 @@ import {RecipeFetcherService, RecipePaginatedFetcherService} from '../../shared/
 import {SearchbarComponent} from './components/searchbar/searchbar.component';
 import {StatModule} from '../../shared';
 import {InfiniteScrollModule} from 'ngx-infinite-scroll';
-import {AngularFireStorageModule} from '@angular/fire/storage';
-import {AngularFirestoreModule} from '@angular/fire/firestore';
+import {AngularFireStorageModule} from '@angular/fire/compat/storage';
+import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
 
 @NgModule({
   imports: [

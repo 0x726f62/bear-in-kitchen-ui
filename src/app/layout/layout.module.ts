@@ -16,8 +16,8 @@ import {HeaderComponent} from './components/header/header.component';
     CommonModule,
     LayoutRoutingModule,
     TranslateModule,
-    NgbDropdownModule.forRoot(),
-    NgbCollapseModule.forRoot()
+    NgbDropdownModule,
+    NgbCollapseModule
   ],
   providers: [AuthService],
   declarations: [LayoutComponent, NavbarComponent, FooterComponent, HeaderComponent]

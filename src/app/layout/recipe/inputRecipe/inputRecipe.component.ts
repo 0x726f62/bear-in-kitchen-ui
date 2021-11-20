@@ -9,8 +9,8 @@ import {
   DynamicSelectModel
 } from '@ng-dynamic-forms/core';
 import {FormArray, FormGroup} from '@angular/forms';
-import {AngularFireStorage} from '@angular/fire/storage';
-import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {AngularFirestore, AngularFirestoreCollection} from '@angular/fire/compat/firestore';
 import {INPUT_RECIPE_MODEL, NG_BOOTSTRAP_SAMPLE_FORM_LAYOUT} from './model/inputRecipeModel';
 import {Observable} from 'rxjs';
 

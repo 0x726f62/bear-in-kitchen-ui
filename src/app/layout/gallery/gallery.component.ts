@@ -4,8 +4,8 @@ import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {RecipeDetail} from '../recipe/recipe.component';
 import {RecipeFetcherService} from '../../shared/services';
-import {AngularFireStorage} from '@angular/fire/storage';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFireStorage} from '@angular/fire/compat/storage';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
 
 @Component({
   selector: 'app-gallery',

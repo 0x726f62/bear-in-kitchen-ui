@@ -1,9 +1,11 @@
 import {Injectable} from '@angular/core';
 import {Router} from '@angular/router';
 
-import {AngularFireAuth} from '@angular/fire/auth';
-import {auth} from 'firebase/app';
-import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/firestore';
+import {AngularFireAuth} from '@angular/fire/compat/auth';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import {AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
 import {Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import 'rxjs/add/operator/switchMap';
@@ -43,12 +45,12 @@ export class AuthService {
   }
 
   public googleLogin() {
-    const provider = new auth.GoogleAuthProvider();
+    const provider = new firebase.auth.GoogleAuthProvider();
     return this.oAuthLogin(provider);
   }
 
   public signOut() {
-    return this.afAuth.auth.signOut();
+    return this.afAuth.signOut();
   }
 
   public isLogged(): Observable<boolean> {
@@ -92,7 +94,7 @@ export class AuthService {
   }
 
   private oAuthLogin(provider) {
-    return this.afAuth.auth.signInWithPopup(provider)
+    return this.afAuth.signInWithPopup(provider)
       .then((credential) => {
         this.updateUserData(credential.user);
       });

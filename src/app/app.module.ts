@@ -3,17 +3,16 @@ import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {HttpClient, HttpClientModule} from '@angular/common/http';
-import {HttpModule} from '@angular/http';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
-import {AngularFireModule} from '@angular/fire';
+import {AngularFireModule} from '@angular/fire/compat';
 import {environment} from '../environments/environment';
 
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AngularFirestoreModule} from '@angular/fire/firestore';
-import {AngularFireAuthModule} from '@angular/fire/auth';
+import {AngularFirestoreModule} from '@angular/fire/compat/firestore';
+import {AngularFireAuthModule} from '@angular/fire/compat/auth';
 import {AuthService} from './shared/services';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -32,7 +31,7 @@ export function createTranslateLoader(http: HttpClient) {
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    NgbModule.forRoot(),
+    NgbModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -40,7 +39,6 @@ export function createTranslateLoader(http: HttpClient) {
         deps: [HttpClient]
       }
     }),
-    HttpModule,
     AppRoutingModule
   ],
   providers: [AuthService],

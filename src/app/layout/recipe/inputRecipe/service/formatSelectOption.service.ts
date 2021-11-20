@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore} from '@angular/fire//firestore';
+import {AngularFirestore} from '@angular/fire/compat/firestore';
 import {CategoryFetcherService, IngredientFetcherService} from '../../../../shared/services';
 import {Observable} from 'rxjs';
 import {RecipeCategory, TagRecipe} from '../../recipe.component';

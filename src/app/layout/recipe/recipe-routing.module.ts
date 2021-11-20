@@ -5,7 +5,7 @@ import {CanEditGuard} from '../../shared/guard';
 
 const routes: Routes = [
   {
-    path: 'new', loadChildren: './inputRecipe/inputRecipe.module#InputRecipeModule', canActivate: [CanEditGuard]
+    path: 'new', loadChildren: () => import('./inputRecipe/inputRecipe.module').then(m => m.InputRecipeModule), canActivate: [CanEditGuard]
   },
   {
     path: ':id', component: RecipeComponent

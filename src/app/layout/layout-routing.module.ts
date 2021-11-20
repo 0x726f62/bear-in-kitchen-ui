@@ -7,11 +7,11 @@ const routes: Routes = [
     path: '',
     component: LayoutComponent,
     children: [
-      {path: '', loadChildren: './gallery/gallery.module#GalleryModule'},
-      {path: 'recipe', loadChildren: './recipe/recipe.module#RecipeModule'},
-      {path: 'tricks-and-tips', loadChildren: './tips-and-tricks/tips-and-tricks.module#TipsAndTricksModule'},
-      {path: 'about-me', loadChildren: './about-me/about-me.module#AboutMeModule'},
-      {path: 'profile', loadChildren: './profile/profile.module#ProfileModule'}
+      {path: '', loadChildren: () => import('./gallery/gallery.module').then(m => m.GalleryModule)},
+      {path: 'recipe', loadChildren: () => import('./recipe/recipe.module').then(m => m.RecipeModule)},
+      {path: 'tricks-and-tips', loadChildren: () => import('./tips-and-tricks/tips-and-tricks.module').then(m => m.TipsAndTricksModule)},
+      {path: 'about-me', loadChildren: () => import('./about-me/about-me.module').then(m => m.AboutMeModule)},
+      {path: 'profile', loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)}
     ]
   }
 ];
