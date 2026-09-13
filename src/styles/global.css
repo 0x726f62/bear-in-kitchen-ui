@@ -135,6 +135,8 @@ input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px 
 .footer-inner p:nth-child(2) { text-align: center; }
 .footer-inner p:last-child { text-align: right; }
 .footer-inner span { color: #ef8276; }
+.site-footer a { color: #fff; }
+.site-footer a:hover { color: var(--gold); }
 .skip-link { position: absolute; z-index: 20; top: -5rem; left: 1rem; padding: .75rem; color: var(--heading); background: #fff; }
 .skip-link:focus { top: 1rem; }
 [hidden] { display: none !important; }
