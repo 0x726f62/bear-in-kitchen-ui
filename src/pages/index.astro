@@ -9,9 +9,11 @@ const usedIngredientIds = new Set(recipes.flatMap(recipe => recipe.data.ingredie
 const ingredients = ingredientCatalog.filter(ingredient => usedIngredientIds.has(ingredient.id)).sort((a, b) => a.name.localeCompare(b.name, 'cs'));
 ---
 <BaseLayout title="Recepty">
-  <p class="eyebrow">Z medvědí kuchyně</p>
-  <h1>Dobré jídlo.<br />Radost z každého sousta.</h1>
-  <p class="lead">Něco sladkého ke kávě, něco dobrého na společný stůl. Najděte si recept, na který máte právě chuť.</p>
+  <header class="page-intro">
+    <p class="eyebrow">Z medvědí kuchyně</p>
+    <h1>Dobré jídlo. Radost z každého sousta.</h1>
+    <p class="lead">Něco sladkého ke kávě, něco dobrého na společný stůl. Najděte si recept, na který máte právě chuť.</p>
+  </header>
   {recipes.length > 0 ? <>
     <div class="filters" id="recipe-filters" hidden>
       <label>Hledat recept<input id="recipe-search" type="search" placeholder="Název nebo ingredience…" /></label>

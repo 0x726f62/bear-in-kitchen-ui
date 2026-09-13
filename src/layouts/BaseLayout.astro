@@ -6,6 +6,7 @@ interface Props { title?: string; description?: string; noindex?: boolean }
 const { title, description = site.description, noindex = false } = Astro.props;
 const pageTitle = title ? `${title} | ${site.name}` : site.name;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+const year = new Date().getFullYear();
 ---
 <!doctype html>
 <html lang={site.language}>
@@ -13,7 +14,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#fbf7f0" />
+    <meta name="theme-color" content="#343434" />
     {noindex && <meta name="robots" content="noindex" />}
     {canonical && <link rel="canonical" href={canonical} />}
     <meta property="og:title" content={pageTitle} />
@@ -21,22 +22,33 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <meta property="og:type" content="website" />
     {canonical && <meta property="og:url" content={canonical} />}
     <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Playfair+Display:ital@0;1&family=Raleway:wght@400;600&family=Source+Serif+4:wght@700&display=swap" rel="stylesheet" />
     <title>{pageTitle}</title>
   </head>
   <body>
     <a class="skip-link" href="#main">Přejít na obsah</a>
-    <header class="site-header shell">
-      <a class="brand" href="/" aria-label={`${site.name} — úvodní stránka`}>
-        <img src="/icons/bear.svg" width="52" height="52" alt="" />
-        <span>Bear <small>in the</small> Kitchen</span>
-      </a>
-      <nav aria-label="Hlavní navigace">
-        {site.navigation.map(({ href, label }) => (
-          <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
-        ))}
-      </nav>
+    <header class="site-header">
+      <div class="header-inner shell">
+        <a class="brand" href="/" aria-label={`${site.name} — úvodní stránka`}>
+          <img src="/icons/bear.svg" width="75" height="75" alt="" />
+          <span>Bear <em>in the</em> Kitchen</span>
+        </a>
+        <nav aria-label="Hlavní navigace">
+          {site.navigation.map(({ href, label }) => (
+            <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
+          ))}
+        </nav>
+      </div>
     </header>
     <main id="main" class="shell"><slot /></main>
-    <footer class="site-footer shell"><p>{site.name} · S chutí a po domácku.</p><a href="/">Zpět k receptům</a></footer>
+    <footer class="site-footer">
+      <div class="footer-inner shell">
+        <p>Made with <span aria-label="láskou">♥</span> by Luci &amp; Rob</p>
+        <p>© 2018–{year} {site.name}. All Rights Reserved</p>
+        <p>Icons designed by Roundicons and Freepik from Flaticon</p>
+      </div>
+    </footer>
   </body>
 </html>

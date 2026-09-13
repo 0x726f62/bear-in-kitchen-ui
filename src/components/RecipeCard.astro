@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { recipeUrl } from '../lib/recipes';
+import { categoryIcon } from '../lib/recipe-icons';
 interface Props { recipe: CollectionEntry<'recipes'> }
 const { recipe } = Astro.props;
 const { data } = recipe;
@@ -13,10 +14,8 @@ const searchText = [data.title, data.description, data.category, ...data.tags, .
       ? <Image src={data.photo} alt={data.photoAlt} width={560} widths={[320, 560, 840]} sizes="(max-width: 480px) 100vw, (max-width: 760px) 50vw, 33vw" />
       : <div class="recipe-image-placeholder" role="img" aria-label={`Fotografie receptu ${data.title} není dočasně dostupná`}>🍴</div>}
     <div class="card-body">
-      <p class="eyebrow">{data.category}{data.draft && ' · Náhled konceptu'}</p>
+      <p class="card-category"><img src={categoryIcon(data.category)} width="22" height="22" alt="" /> {data.category}{data.draft && ' · Náhled konceptu'}</p>
       <h2>{data.title}</h2>
-      <p>{data.description}</p>
-      <div class="metadata"><span>{data.minutes} min</span><span>{data.difficulty}</span></div>
     </div>
   </a>
 </article>

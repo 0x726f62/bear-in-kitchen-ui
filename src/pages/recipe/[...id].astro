@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getRecipes } from '../../lib/recipes';
+import { categoryIcon, stepIcons } from '../../lib/recipe-icons';
 
 export async function getStaticPaths() {
   return (await getRecipes()).map(recipe => ({ params: { id: recipe.id }, props: { recipe } }));
@@ -10,6 +11,7 @@ export async function getStaticPaths() {
 interface Props { recipe: CollectionEntry<'recipes'> }
 const { recipe: { data } } = Astro.props;
 let step = 0;
+const steps = data.steps.map(item => ({ ...item, number: item.tip ? undefined : ++step }));
 const structuredData = {
   '@context': 'https://schema.org', '@type': 'Recipe', name: data.title,
   description: data.description,
@@ -21,15 +23,28 @@ const structuredData = {
 };
 ---
 <BaseLayout title={data.title} description={data.description} noindex={data.draft}>
-  <a class="no-print" href="/">← Všechny recepty</a>
-  <p class="eyebrow mt-8">{data.category}</p>
-  {data.draft && <p class="tip">Náhled konceptu. Tento recept není publikovaný.</p>}
-  <h1>{data.title}</h1>
-  <p class="lead">{data.description}</p>
-  <div class="metadata"><span>{data.minutes} minut</span><span>Počet porcí: {data.serves}</span><span>{data.difficulty}</span></div>
-  {data.photo
-    ? <Image class="recipe-photo" src={data.photo} alt={data.photoAlt} width={1120} widths={[560, 840, 1120]} sizes="(max-width: 1120px) 100vw, 1120px" loading="eager" />
-    : <div class="recipe-photo recipe-image-placeholder" role="img" aria-label={`Fotografie receptu ${data.title} není dočasně dostupná`}>🍴</div>}
+  <a class="back-link no-print" href="/">← Všechny recepty</a>
+  {data.draft && <p class="tip draft-notice">Náhled konceptu. Tento recept není publikovaný.</p>}
+  <div class="recipe-overview-grid">
+    <div class="recipe-visual">
+      {data.photo
+        ? <Image class="recipe-photo" src={data.photo} alt={data.photoAlt} width={720} widths={[420, 720, 960]} sizes="(max-width: 760px) 100vw, 50vw" loading="eager" />
+        : <div class="recipe-photo recipe-image-placeholder" role="img" aria-label={`Fotografie receptu ${data.title} není dočasně dostupná`}>🍴</div>}
+    </div>
+    <article class="recipe-overview">
+      <div class="overview-section"><h1>{data.title}</h1></div>
+      <div class="overview-section recipe-description"><p>{data.description}</p></div>
+      <div class="overview-section recipe-stats">
+        <div><img src={categoryIcon(data.category)} width="38" height="38" alt="" /><span>{data.category}</span></div>
+        <div><img src="/icons/008-clock-of-circular-shape-at-two-o-clock.svg" width="38" height="38" alt="" /><span>{data.minutes} minut</span></div>
+        <div><img src="/icons/007-team.svg" width="38" height="38" alt="" /><span>{data.serves} porcí</span></div>
+        <div><img src="/icons/043-wooden-spoon.svg" width="38" height="38" alt="" /><span>{data.difficulty}</span></div>
+      </div>
+      {data.tags.length > 0 && <div class="overview-section recipe-tags">{data.tags.join(' · ')}</div>}
+      <button id="print-recipe" class="button no-print" type="button" hidden>Vytisknout recept</button>
+    </article>
+  </div>
+  <hr class="recipe-divider" />
   <div class="recipe-body">
     <section class="ingredients" aria-labelledby="ingredients-heading">
       <h2 id="ingredients-heading">Ingredience</h2>
@@ -37,9 +52,14 @@ const structuredData = {
     </section>
     <section aria-labelledby="steps-heading">
       <h2 id="steps-heading" class="mt-0">Postup</h2>
-      <div class="steps">{data.steps.map(item => item.tip ? <aside class="tip"><strong>Tip: </strong>{item.content}{item.photo && <Image src={item.photo} alt={item.photoAlt ?? 'Fotografie k tipu'} width={700} />}</aside> : <section class="mb-8"><h3 class="mb-3">{++step}. krok</h3><p>{item.content}</p>{item.photo && <Image src={item.photo} alt={item.photoAlt ?? `Postup přípravy, krok ${step}`} width={700} />}</section>)}</div>
-      {data.tags.length > 0 && <p class="metadata">{data.tags.join(' · ')}</p>}
-      <button id="print-recipe" class="button no-print" type="button" hidden>Vytisknout recept</button>
+      <ol class="steps">{steps.map(item => <li class:list={['timeline-item', { 'timeline-tip': item.tip }]}>
+        <div class="timeline-badge"><img src={item.tip ? '/icons/004-idea.svg' : stepIcons[(item.number ?? 1) - 1] ?? '/icons/043-wooden-spoon.svg'} width="42" height="42" alt="" /></div>
+        <div class="timeline-panel">
+          {item.tip && <strong>Tip</strong>}
+          <p>{item.content}</p>
+          {item.photo && <Image src={item.photo} alt={item.photoAlt ?? (item.tip ? 'Fotografie k tipu' : `Postup přípravy, krok ${item.number}`)} width={700} />}
+        </div>
+      </li>)}</ol>
     </section>
   </div>
   {!data.draft && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />}
