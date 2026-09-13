@@ -15,9 +15,18 @@ const ingredients = ingredientCatalog.filter(ingredient => usedIngredientIds.has
     <p class="lead">Něco sladkého ke kávě, něco dobrého na společný stůl. Najděte si recept, na který máte právě chuť.</p>
   </header>
   {recipes.length > 0 ? <>
-    <div class="filters" id="recipe-filters" hidden>
-      <label>Hledat recept<input id="recipe-search" type="search" placeholder="Název nebo ingredience…" /></label>
-      <label>Kategorie<select id="recipe-category"><option value="">Všechny recepty</option>{categories.map(category => <option>{category}</option>)}</select></label>
+    <section class="filters" id="recipe-filters" aria-labelledby="filter-heading" hidden>
+      <div class="filter-heading">
+        <div>
+          <p class="eyebrow">Vyberte si</p>
+          <h2 id="filter-heading">Najděte recept</h2>
+        </div>
+        <p>Hledejte podle názvu, kategorie nebo surovin, které máte doma.</p>
+      </div>
+      <div class="filter-fields">
+        <label>Hledat recept<input id="recipe-search" type="search" placeholder="Název nebo ingredience…" /></label>
+        <label>Kategorie<select id="recipe-category"><option value="">Všechny recepty</option>{categories.map(category => <option>{category}</option>)}</select></label>
+      </div>
       <fieldset class="pantry-filter">
         <legend>Ingredience, které máte</legend>
         <div class="pantry-controls">
@@ -25,13 +34,15 @@ const ingredients = ingredientCatalog.filter(ingredient => usedIngredientIds.has
             <option value="">Vyberte ingredienci…</option>
             {ingredients.map(ingredient => <option value={ingredient.id}>{ingredient.name}</option>)}
           </select>
-          <button class="button" id="add-ingredient" type="button">Přidat</button>
+          <button class="button button-primary" id="add-ingredient" type="button">Přidat ingredienci</button>
         </div>
         <div id="selected-ingredients" class="ingredient-chips" aria-live="polite"></div>
       </fieldset>
-      <button class="button" id="reset-filters" type="button">Zrušit filtry</button>
-    </div>
-    <p id="recipe-count" role="status" aria-live="polite" class="my-4">Počet receptů: {recipes.length}</p>
+      <div class="filter-footer">
+        <p id="recipe-count" role="status" aria-live="polite">Počet receptů: {recipes.length}</p>
+        <button class="button button-quiet" id="reset-filters" type="button">Vymazat filtry</button>
+      </div>
+    </section>
     <div class="recipe-grid">{recipes.map(recipe => <RecipeCard recipe={recipe} />)}</div>
     <p id="no-results" hidden>Žádný recept neodpovídá hledání. Zkuste jiná slova nebo kategorii.</p>
   </> : <div class="prose mt-12"><h2>Recepty se připravují</h2><p>Brzy tu najdete inspiraci pro vaření a pečení.</p></div>}

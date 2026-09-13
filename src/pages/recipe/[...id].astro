@@ -41,20 +41,24 @@ const structuredData = {
         <div><img src="/icons/043-wooden-spoon.svg" width="38" height="38" alt="" /><span>{data.difficulty}</span></div>
       </div>
       {data.tags.length > 0 && <div class="overview-section recipe-tags">{data.tags.join(' · ')}</div>}
-      <button id="print-recipe" class="button no-print" type="button" hidden>Vytisknout recept</button>
+      <button id="print-recipe" class="button button-primary no-print" type="button" hidden>Vytisknout recept</button>
     </article>
   </div>
   <hr class="recipe-divider" />
   <div class="recipe-body">
     <section class="ingredients" aria-labelledby="ingredients-heading">
-      <h2 id="ingredients-heading">Ingredience</h2>
-      <ul>{data.ingredients.map(item => <li>{item.quantity?.toLocaleString('cs')} {item.unit} {item.name}</li>)}</ul>
+      <div class="section-heading"><p class="eyebrow">Co budete potřebovat</p><h2 id="ingredients-heading">Ingredience</h2></div>
+      <ul class="ingredient-list">{data.ingredients.map(item => <li class="content-card ingredient-item">
+        <span class="ingredient-marker" aria-hidden="true"></span>
+        <span class="ingredient-name">{item.name}</span>
+        {(item.quantity || item.unit) && <span class="ingredient-amount">{item.quantity?.toLocaleString('cs')} {item.unit}</span>}
+      </li>)}</ul>
     </section>
     <section aria-labelledby="steps-heading">
-      <h2 id="steps-heading" class="mt-0">Postup</h2>
+      <div class="section-heading"><p class="eyebrow">Krok za krokem</p><h2 id="steps-heading">Postup</h2></div>
       <ol class="steps">{steps.map(item => <li class:list={['timeline-item', { 'timeline-tip': item.tip }]}>
         <div class="timeline-badge"><img src={item.tip ? '/icons/004-idea.svg' : stepIcons[(item.number ?? 1) - 1] ?? '/icons/043-wooden-spoon.svg'} width="42" height="42" alt="" /></div>
-        <div class="timeline-panel">
+        <div class="timeline-panel content-card">
           {item.tip && <strong>Tip</strong>}
           <p>{item.content}</p>
           {item.photo && <Image src={item.photo} alt={item.photoAlt ?? (item.tip ? 'Fotografie k tipu' : `Postup přípravy, krok ${item.number}`)} width={700} />}
