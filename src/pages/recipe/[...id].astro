@@ -50,8 +50,10 @@ const structuredData = {
       <div class="section-heading"><p class="eyebrow">Co budete potřebovat</p><h2 id="ingredients-heading">Ingredience</h2></div>
       <ul class="ingredient-list">{data.ingredients.map(item => <li class="content-card ingredient-item">
         <span class="ingredient-marker" aria-hidden="true"></span>
-        <span class="ingredient-name">{item.name}</span>
-        {(item.quantity || item.unit) && <span class="ingredient-amount">{item.quantity?.toLocaleString('cs')} {item.unit}</span>}
+        <span class="ingredient-content">
+          {(item.quantity || item.unit) && <span class="ingredient-amount">{item.quantity?.toLocaleString('cs')} {item.unit}</span>}
+          <span class="ingredient-name">{item.name}</span>
+        </span>
       </li>)}</ul>
     </section>
     <section aria-labelledby="steps-heading">
