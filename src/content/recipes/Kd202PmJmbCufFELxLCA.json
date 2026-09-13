@@ -1,0 +1,105 @@
+{
+  "title": "Italské houbové rizoto",
+  "description": "Krémové italské rizoto pro chmurné dny.",
+  "draft": false,
+  "category": "dezerty",
+  "tags": [
+    "bio"
+  ],
+  "published": "2018-02-17",
+  "photo": "../../assets/recipes/Kd202PmJmbCufFELxLCA-main.jpg",
+  "photoAlt": "Italské houbové rizoto – hotový pokrm",
+  "serves": 4,
+  "minutes": 50,
+  "difficulty": "Snadné",
+  "ingredients": [
+    {
+      "ingredientId": "zampiony",
+      "name": "žampionů",
+      "quantity": 250,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "salotka",
+      "name": "šalotka",
+      "quantity": 1,
+      "unit": ""
+    },
+    {
+      "ingredientId": "sul",
+      "name": "soli",
+      "quantity": 1,
+      "unit": "spetka"
+    },
+    {
+      "ingredientId": "hrasek",
+      "name": "mraženého hrášku",
+      "quantity": 150,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "ryze-arborio",
+      "name": "rýže Arborio",
+      "quantity": 340,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "kureci-bujon",
+      "name": "kuřecí bujón",
+      "quantity": 1,
+      "unit": ""
+    },
+    {
+      "ingredientId": "parmezan",
+      "name": "parmezánu",
+      "quantity": 150,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "pepr",
+      "name": "pepře",
+      "quantity": 1,
+      "unit": "spetka"
+    },
+    {
+      "ingredientId": "cuketa",
+      "name": "střední cuketa",
+      "quantity": 1,
+      "unit": ""
+    },
+    {
+      "ingredientId": "susene-houby",
+      "name": "sušených hub",
+      "quantity": 0.5,
+      "unit": "hrnku"
+    },
+    {
+      "ingredientId": "tymian",
+      "name": "sušeneho tymiánu",
+      "quantity": 1,
+      "unit": "lzicka"
+    }
+  ],
+  "steps": [
+    {
+      "content": "Sušené houby namočíme do teplé vody. A na troše olivového oleje osmahneme omyté a nakrájené žampiony a šalotku nakrájenou na jemno.",
+      "tip": false
+    },
+    {
+      "content": "Cuketu zbavíme slupky, nakrájíme na malé kostičky a přidáme do pánve, osolíme, opepříme a okořeníme tymiánem.",
+      "tip": false
+    },
+    {
+      "content": "Dále přidáme rýži a promícháme. Vhodíme bujón a 2 hrnky vody. Vodu přidáváme postupně (celkem cca 1l). Do pánve přilijeme i vodu ze sušených hub a přidáme sušené houby.",
+      "tip": false
+    },
+    {
+      "content": "Ke konci vaření přidáme mražený hrášek. Poté parmezán a ještě lehce prohřejeme, ale už nevaříme.",
+      "tip": false
+    },
+    {
+      "content": "Ihned podáváme posypané parmezánem.",
+      "tip": false
+    }
+  ]
+}

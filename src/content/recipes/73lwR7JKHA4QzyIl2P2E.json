@@ -1,0 +1,81 @@
+{
+  "title": "Tiramisu",
+  "description": "Italský klasický dezert, který zažene špatnou náladu.",
+  "draft": false,
+  "category": "dezerty",
+  "tags": [
+    "Itálie"
+  ],
+  "published": "2020-01-12",
+  "photo": "../../assets/recipes/73lwR7JKHA4QzyIl2P2E-main.jpg",
+  "photoAlt": "Tiramisu – hotový pokrm",
+  "serves": 4,
+  "minutes": 20,
+  "difficulty": "Snadné",
+  "ingredients": [
+    {
+      "ingredientId": "amaretto",
+      "name": "amaretta",
+      "quantity": 5,
+      "unit": "cl"
+    },
+    {
+      "ingredientId": "cukr-krupice",
+      "name": "krupicového cukru",
+      "quantity": 2,
+      "unit": "lžíce"
+    },
+    {
+      "ingredientId": "kakao",
+      "name": "kakaa",
+      "quantity": 1,
+      "unit": "lžíce"
+    },
+    {
+      "ingredientId": "kava",
+      "name": "zrnkové mleté kávy",
+      "quantity": 1,
+      "unit": "lžička"
+    },
+    {
+      "ingredientId": "vejce",
+      "name": "vejce",
+      "quantity": 2,
+      "unit": ""
+    },
+    {
+      "ingredientId": "cukrarske-piskoty",
+      "name": "cukrářských piškotů",
+      "quantity": 12,
+      "unit": ""
+    },
+    {
+      "ingredientId": "mascarpone",
+      "name": "mascarpone",
+      "quantity": 250,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    {
+      "content": "Uvaříme si malý hrnek kávy a přidáme do něj amaretto.",
+      "tip": false
+    },
+    {
+      "content": "Žloutky si vyšleháme s cukrem, poté zašleháme mascarpone a nakonec zlehka vmícháme ušlehaný sníh z bílků.",
+      "tip": false
+    },
+    {
+      "content": "Připravíme si čtyři nízké skleničky. A namáčíme piškoty do kávy s likérem tak, aby nasákly tekutinu, ale nebyly příliš rozmočené a vložíme je na dno skleniček. Na piškoty rozetřeme polovinu krému a na krém opět namočené piškoty a další vrstvu krému, kterou posypeme kakaem.",
+      "tip": false
+    },
+    {
+      "content": "Skleničky uložíme aspoň na 2 hodiny do lednice.",
+      "tip": false
+    },
+    {
+      "content": "Recept obsahuje syrová vejce, proto je dobré mít vejce co nejčerstvější.",
+      "tip": true
+    }
+  ]
+}

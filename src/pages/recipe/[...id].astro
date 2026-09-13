@@ -1,0 +1,50 @@
+---
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getRecipes } from '../../lib/recipes';
+
+export async function getStaticPaths() {
+  return (await getRecipes()).map(recipe => ({ params: { id: recipe.id }, props: { recipe } }));
+}
+interface Props { recipe: CollectionEntry<'recipes'> }
+const { recipe: { data } } = Astro.props;
+let step = 0;
+const structuredData = {
+  '@context': 'https://schema.org', '@type': 'Recipe', name: data.title,
+  description: data.description,
+  ...(Astro.site && data.photo ? { image: [new URL(data.photo.src, Astro.site).href] } : {}),
+  datePublished: data.published.toISOString(), recipeCategory: data.category,
+  keywords: data.tags.join(', '), recipeYield: String(data.serves), totalTime: `PT${data.minutes}M`,
+  recipeIngredient: data.ingredients.map(item => [item.quantity, item.unit, item.name].filter(Boolean).join(' ')),
+  recipeInstructions: data.steps.filter(item => !item.tip).map(item => ({ '@type': 'HowToStep', text: item.content })),
+};
+---
+<BaseLayout title={data.title} description={data.description} noindex={data.draft}>
+  <a class="no-print" href="/">← Všechny recepty</a>
+  <p class="eyebrow mt-8">{data.category}</p>
+  {data.draft && <p class="tip">Náhled konceptu. Tento recept není publikovaný.</p>}
+  <h1>{data.title}</h1>
+  <p class="lead">{data.description}</p>
+  <div class="metadata"><span>{data.minutes} minut</span><span>Počet porcí: {data.serves}</span><span>{data.difficulty}</span></div>
+  {data.photo
+    ? <Image class="recipe-photo" src={data.photo} alt={data.photoAlt} width={1120} widths={[560, 840, 1120]} sizes="(max-width: 1120px) 100vw, 1120px" loading="eager" />
+    : <div class="recipe-photo recipe-image-placeholder" role="img" aria-label={`Fotografie receptu ${data.title} není dočasně dostupná`}>🍴</div>}
+  <div class="recipe-body">
+    <section class="ingredients" aria-labelledby="ingredients-heading">
+      <h2 id="ingredients-heading">Ingredience</h2>
+      <ul>{data.ingredients.map(item => <li>{item.quantity?.toLocaleString('cs')} {item.unit} {item.name}</li>)}</ul>
+    </section>
+    <section aria-labelledby="steps-heading">
+      <h2 id="steps-heading" class="mt-0">Postup</h2>
+      <div class="steps">{data.steps.map(item => item.tip ? <aside class="tip"><strong>Tip: </strong>{item.content}{item.photo && <Image src={item.photo} alt={item.photoAlt ?? 'Fotografie k tipu'} width={700} />}</aside> : <section class="mb-8"><h3 class="mb-3">{++step}. krok</h3><p>{item.content}</p>{item.photo && <Image src={item.photo} alt={item.photoAlt ?? `Postup přípravy, krok ${step}`} width={700} />}</section>)}</div>
+      {data.tags.length > 0 && <p class="metadata">{data.tags.join(' · ')}</p>}
+      <button id="print-recipe" class="button no-print" type="button" hidden>Vytisknout recept</button>
+    </section>
+  </div>
+  {!data.draft && <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />}
+</BaseLayout>
+<script>
+  const button = document.querySelector<HTMLButtonElement>('#print-recipe');
+  if (button) { button.hidden = false; button.addEventListener('click', () => window.print()); }
+</script>

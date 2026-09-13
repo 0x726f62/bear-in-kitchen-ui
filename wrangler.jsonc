@@ -1,0 +1,18 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "bear-in-kitchen",
+  "compatibility_date": "2026-09-13",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "bear-in-kitchen",
+      "database_id": "c40ce6c7-ec2c-48af-abf2-9df5ad8846ab",
+      "migrations_dir": "migrations"
+    }
+  ]
+}

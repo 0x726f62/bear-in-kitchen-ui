@@ -1,0 +1,71 @@
+{
+  "title": "Špagety Carbonara",
+  "description": "Italská klasika, která nikdy nezklame.",
+  "draft": false,
+  "category": "hlavní chody",
+  "tags": [
+    "Itálie"
+  ],
+  "published": "2020-01-12",
+  "photo": "../../assets/recipes/jpscnE6PuIduHCLLdJnU-main.jpg",
+  "photoAlt": "Špagety Carbonara – hotový pokrm",
+  "serves": 4,
+  "minutes": 20,
+  "difficulty": "Snadné",
+  "ingredients": [
+    {
+      "ingredientId": "slanina",
+      "name": "slaniny",
+      "quantity": 150,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "spagety",
+      "name": "špaget",
+      "quantity": 500,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "sul",
+      "name": "soli",
+      "unit": "špetka"
+    },
+    {
+      "ingredientId": "pepr",
+      "name": "čerstvě namletého pepře",
+      "unit": "lžička"
+    },
+    {
+      "ingredientId": "vejce",
+      "name": "vejce",
+      "quantity": 4,
+      "unit": ""
+    },
+    {
+      "ingredientId": "cedar",
+      "name": "čedaru",
+      "quantity": 150,
+      "unit": "g"
+    }
+  ],
+  "steps": [
+    {
+      "content": "Dáme vařit vodu na špagety. A mezitím si orestujeme slaninu nakrájenou na kostičky na troše olivového oleje.",
+      "tip": false,
+      "photo": "../../assets/recipes/jpscnE6PuIduHCLLdJnU-step-1.jpg",
+      "photoAlt": "Špagety Carbonara – postup, krok 1"
+    },
+    {
+      "content": "Dáme vařit špagety. Do misky si nastrouháme čedar a čtvrtinu si odložíme stranou. K sýru přidáme rozklepnutá vejce, pepř, trochu soli a rozmícháme.",
+      "tip": false
+    },
+    {
+      "content": "Uvařené špagety slijeme, ale necháme si hrnek vody stranou. Ke špagetám přidáme směs vajec a sýru a polovinu hrnku vody. Mícháním se vytvoří lehká omáčka, která obalí špagety. Podle konzistence případně přilijeme ještě vodu ze špaget.",
+      "tip": false
+    },
+    {
+      "content": "Dále přidáme slaninu, zamícháme a ihned podáváme posypané zbylým čedarem.",
+      "tip": false
+    }
+  ]
+}

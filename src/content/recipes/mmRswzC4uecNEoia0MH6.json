@@ -1,0 +1,108 @@
+{
+  "title": "Čokoládové muffiny s višněmi",
+  "description": "Neodolatelná kombinace čokolády a višní.",
+  "draft": false,
+  "category": "dezerty",
+  "tags": [
+    "čokoláda"
+  ],
+  "published": "2018-02-25",
+  "photo": "../../assets/recipes/mmRswzC4uecNEoia0MH6-main.jpg",
+  "photoAlt": "Čokoládové muffiny s višněmi – hotový pokrm",
+  "serves": 12,
+  "minutes": 50,
+  "difficulty": "Snadné",
+  "ingredients": [
+    {
+      "ingredientId": "prasek-do-peciva",
+      "name": "prášek do pečiva",
+      "quantity": 1,
+      "unit": ""
+    },
+    {
+      "ingredientId": "mouka",
+      "name": "celozrnné hladké mouky",
+      "quantity": 1,
+      "unit": "hrnek"
+    },
+    {
+      "ingredientId": "cokolada",
+      "name": "hořké čokolády",
+      "quantity": 200,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "jogurt",
+      "name": "bílého jogurtu",
+      "quantity": 150,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "kakao",
+      "name": "kakaa",
+      "quantity": 2,
+      "unit": "lžíce"
+    },
+    {
+      "ingredientId": "vejce",
+      "name": "vejce",
+      "quantity": 2,
+      "unit": ""
+    },
+    {
+      "ingredientId": "visne",
+      "name": "višní",
+      "quantity": 200,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "maslo",
+      "name": "máslo",
+      "quantity": 100,
+      "unit": "g"
+    },
+    {
+      "ingredientId": "mouka",
+      "name": "hladké mouky",
+      "quantity": 1,
+      "unit": "hrnek"
+    },
+    {
+      "ingredientId": "cukr",
+      "name": "třtinového cukru",
+      "unit": "hrnku"
+    }
+  ],
+  "steps": [
+    {
+      "content": "Na vodní lázni si rozpustíme 120g čokolády s máslem.",
+      "tip": false
+    },
+    {
+      "content": "Čokoládu a máslo můžeme rozpustit i v mikrovlnce. Dáme ho do ní na 30s, vyndáme, zamícháme a znovu ho tam vložíme na 20s a podle potřeby opakujeme, dokud není čokoláda s máslem rozpuštěná. Dáváme pozor, aby se nám čokoláda nespálila.",
+      "tip": true
+    },
+    {
+      "content": "Troubu si předehřejeme na 200°C.",
+      "tip": false
+    },
+    {
+      "content": "Nejdříve si v míse smícháme mouku, cukr, prášek do pečiva a kakao, uděláme důlek a přidáme jogurt, vejce a vychladlou rozpuštěnou čokoládu s máslem.",
+      "tip": false
+    },
+    {
+      "content": "Nakonec zlehka vmícháme vypeckované višně a zbytek čokolády pokrájené na kousky.",
+      "tip": false
+    },
+    {
+      "content": "Směsí naplníme muffinovou formu vyloženou papírovými košíčky.",
+      "tip": false,
+      "photo": "../../assets/recipes/mmRswzC4uecNEoia0MH6-step-6.jpg",
+      "photoAlt": "Čokoládové muffiny s višněmi – postup, krok 6"
+    },
+    {
+      "content": "Pečeme 30min na 180°C.",
+      "tip": false
+    }
+  ]
+}

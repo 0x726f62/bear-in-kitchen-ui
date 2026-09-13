@@ -1,0 +1,54 @@
+{
+  "title": "Krutonky",
+  "description": "Krutonky si můžeme vyrobit z jakéhokoliv pečiva, které máme rádi, nejlépe den dva starého, prostě z toho, které nám zbylo. Někdo má rád krutonky v polévce jen na ozdobu a někdo jich sní celou misku. A tím se stane z polévky hlavní chod.",
+  "draft": false,
+  "category": "dezerty",
+  "tags": [
+    "bio",
+    "light"
+  ],
+  "published": "2018-02-20",
+  "photo": "../../assets/recipes/7uDf27jmYF8R2AjVwqfR-main.jpg",
+  "photoAlt": "Krutonky – hotový pokrm",
+  "serves": 2,
+  "minutes": 15,
+  "difficulty": "Snadné",
+  "ingredients": [
+    {
+      "ingredientId": "chleba",
+      "name": "chleba",
+      "quantity": 4,
+      "unit": "krajíce"
+    },
+    {
+      "ingredientId": "cesnek",
+      "name": "česneku",
+      "quantity": 1,
+      "unit": "stroužek"
+    },
+    {
+      "ingredientId": "susena-petrzel",
+      "name": "sušené petrželky",
+      "quantity": 1,
+      "unit": "lžička"
+    }
+  ],
+  "steps": [
+    {
+      "content": "Krutonky můžeme připravit dopředu a schovat do suché vzduchotěsné nádoby.",
+      "tip": true
+    },
+    {
+      "content": "Pečivo pokrájíme na středně velké kostičky.",
+      "tip": false
+    },
+    {
+      "content": "Osmahneme na středně rozpálené grilovací nebo obyčejné pánvi na sucho spolu se stroužkem česneku, který jsme neoloupali a sušenou petrželkou. Průběžně prohazujeme/promícháváme.",
+      "tip": false
+    },
+    {
+      "content": "Krutonky lze také upéct v troubě (190°, 10min), kde dojde k rovnoměrnému opečení a stačí promíchat jen jednou, v polovině době pečení.",
+      "tip": true
+    }
+  ]
+}
