@@ -37,8 +37,17 @@ const year = new Date().getFullYear();
         </a>
         <nav aria-label="Hlavní navigace">
           {site.navigation.map(({ href, label }) => (
-            <a href={href} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
+            <a href={href} data-login-link={href === '/login/' ? '' : undefined} aria-current={Astro.url.pathname === href ? 'page' : undefined}>{label}</a>
           ))}
+          <div class="account-nav" data-account-nav hidden>
+            <a class="profile-link" href="/login/" data-profile-link>
+              <span class="profile-avatar" data-profile-avatar aria-hidden="true"></span>
+              <span data-profile-name></span>
+            </a>
+            <form method="post" action="/auth/logout">
+              <button class="nav-logout" type="submit">Odhlásit se</button>
+            </form>
+          </div>
         </nav>
       </div>
     </header>
@@ -54,5 +63,41 @@ const year = new Date().getFullYear();
         </p>
       </div>
     </footer>
+    <script>
+      interface CurrentUser {
+        displayName: string;
+        photoUrl: string | null;
+        role: 'USER' | 'EDITOR' | 'ADMIN';
+      }
+
+      const loginLink = document.querySelector<HTMLElement>('[data-login-link]');
+      const accountNav = document.querySelector<HTMLElement>('[data-account-nav]');
+      const profileLink = document.querySelector<HTMLAnchorElement>('[data-profile-link]');
+      const profileName = document.querySelector<HTMLElement>('[data-profile-name]');
+      const profileAvatar = document.querySelector<HTMLElement>('[data-profile-avatar]');
+
+      if (loginLink && accountNav && profileLink && profileName && profileAvatar) {
+        fetch('/api/auth/me', { headers: { accept: 'application/json' }, credentials: 'same-origin' })
+          .then(response => response.ok ? response.json() as Promise<CurrentUser> : null)
+          .then(user => {
+            if (!user) return;
+            profileName.textContent = user.displayName;
+            profileLink.setAttribute('aria-label', `Profil uživatele ${user.displayName}, role ${user.role}`);
+            profileLink.title = `Profil · ${user.role}`;
+            if (user.photoUrl) {
+              const image = document.createElement('img');
+              image.src = user.photoUrl;
+              image.alt = '';
+              image.referrerPolicy = 'no-referrer';
+              profileAvatar.replaceWith(image);
+            } else {
+              profileAvatar.textContent = Array.from(user.displayName.trim())[0]?.toLocaleUpperCase('cs') ?? '?';
+            }
+            loginLink.hidden = true;
+            accountNav.hidden = false;
+          })
+          .catch(() => {});
+      }
+    </script>
   </body>
 </html>

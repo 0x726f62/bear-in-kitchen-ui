@@ -37,6 +37,13 @@ nav { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .25rem; fo
 nav a { padding: .6rem .85rem; border-radius: 999px; color: rgb(255 255 255 / 82%); text-decoration: none; transition: color .2s ease, background .2s ease; }
 nav a:hover { color: #fff; background: rgb(255 255 255 / 9%); text-decoration: none; }
 nav a[aria-current] { color: var(--charcoal); background: var(--gold); text-decoration: none; }
+.account-nav { display: flex; align-items: center; gap: .25rem; }
+.account-nav form { margin: 0; }
+.profile-link { display: inline-flex; align-items: center; gap: .5rem; }
+.profile-link img, .profile-avatar { width: 1.8rem; height: 1.8rem; border-radius: 50%; object-fit: cover; }
+.profile-avatar { display: grid; place-items: center; color: var(--charcoal); background: var(--gold); font-size: .78rem; font-weight: 750; }
+.nav-logout { min-height: 2.6rem; padding: .6rem .85rem; border: 0; border-radius: 999px; color: rgb(255 255 255 / 82%); background: transparent; transition: color .2s ease, background .2s ease; }
+.nav-logout:hover { color: #fff; background: rgb(255 255 255 / 9%); }
 
 main { min-height: 65vh; padding-block: 2.5rem 4rem; }
 h1, h2, h3 { color: var(--heading); font-family: "Playfair Display Variable", "Playfair Display", serif; font-weight: 500; line-height: 1.15; }
