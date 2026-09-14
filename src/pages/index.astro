@@ -1,9 +1,16 @@
 ---
+export const prerender = false;
 import BaseLayout from '../layouts/BaseLayout.astro';
 import RecipeCard from '../components/RecipeCard.astro';
-import { getRecipes } from '../lib/recipes';
+import { getCollection } from 'astro:content';
 import ingredientCatalog from '../data/ingredients.json';
-const recipes = await getRecipes();
+import { getCurrentUser } from '../lib/server/auth';
+import { canEdit, getDb } from '../lib/server/db';
+import { getDatabaseRecipes } from '../lib/server/recipes';
+const user = await getCurrentUser(Astro.request, getDb());
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+const contentPhotos = new Map((await getCollection('recipes')).map(recipe => [recipe.id, recipe.data.photo]));
+const recipes = (await getDatabaseRecipes(getDb(), Boolean(user && canEdit(user.role)))).map(recipe => ({ id: recipe.id, data: { ...recipe, photo: contentPhotos.get(recipe.id) } }));
 const categories = [...new Set(recipes.map(recipe => recipe.data.category))].sort((a, b) => a.localeCompare(b, 'cs'));
 const usedIngredientIds = new Set(recipes.flatMap(recipe => recipe.data.ingredients.map(item => item.ingredientId)));
 const ingredients = ingredientCatalog.filter(ingredient => usedIngredientIds.has(ingredient.id)).sort((a, b) => a.name.localeCompare(b.name, 'cs'));

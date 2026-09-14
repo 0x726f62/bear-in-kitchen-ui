@@ -6,5 +6,6 @@ export const site = {
     { href: '/', label: 'Recepty' },
     { href: '/tricks-and-tips/', label: 'Rady & tipy' },
     { href: '/about-me/', label: 'O mně' },
+    { href: '/login/', label: 'Přihlášení' },
   ],
 };

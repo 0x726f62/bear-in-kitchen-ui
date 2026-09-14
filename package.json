@@ -14,13 +14,13 @@
     "check": "astro check",
     "preview": "astro preview",
     "db:generate-seed": "node scripts/generate-d1-seed.mjs",
-    "db:seed": "npm run db:generate-seed && wrangler d1 execute bear-in-kitchen --remote --file database/seed.sql",
     "images:upload": "node scripts/upload-r2-images.mjs",
     "deploy": "npm run build && wrangler deploy",
     "test": "node --test tests/search.test.mjs",
     "test:build": "node --test tests/build.test.mjs"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^14.3.1",
     "@astrojs/sitemap": "^3.7.3",
     "@fontsource-variable/montserrat": "^5.3.0",
     "@fontsource-variable/playfair-display": "^5.3.0",

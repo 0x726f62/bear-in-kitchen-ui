@@ -1,9 +1,9 @@
 ---
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import type { ImageMetadata } from 'astro';
 import { recipeUrl } from '../lib/recipes';
 import { categoryIcon } from '../lib/recipe-icons';
-interface Props { recipe: CollectionEntry<'recipes'> }
+interface Props { recipe: { id: string; data: { title: string; description: string; draft: boolean; category: string; tags: string[]; photo?: ImageMetadata; photoAlt: string; ingredients: Array<{ ingredientId: string; name: string }> } } }
 const { recipe } = Astro.props;
 const { data } = recipe;
 const searchText = [data.title, data.description, data.category, ...data.tags, ...data.ingredients.map(item => item.name)].join(' ');

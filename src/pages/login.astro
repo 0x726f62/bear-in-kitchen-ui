@@ -1,0 +1,54 @@
+---
+export const prerender = false;
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCurrentUser } from '../lib/server/auth';
+import { canEdit as canEditRole, getDb } from '../lib/server/db';
+const user = await getCurrentUser(Astro.request, getDb());
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+const returnTo = Astro.url.searchParams.get('returnTo') ?? '/';
+const loginErrors: Record<string, string> = {
+  invalid_credentials: 'E-mail nebo heslo není správné.',
+  too_many_attempts: 'Příliš mnoho pokusů. Zkuste to prosím později.',
+};
+const registerErrors: Record<string, string> = {
+  invalid_name: 'Zadejte jméno dlouhé nejvýše 100 znaků.',
+  invalid_email: 'Zadejte platnou e-mailovou adresu.',
+  invalid_password: 'Heslo musí mít 15 až 128 znaků.',
+  password_mismatch: 'Zadaná hesla se neshodují.',
+  account_exists: 'Účet s tímto e-mailem už existuje.',
+  too_many_attempts: 'Z tohoto připojení bylo vytvořeno příliš mnoho účtů. Zkuste to později.',
+};
+const loginError = loginErrors[Astro.url.searchParams.get('error') ?? ''];
+const registerError = registerErrors[Astro.url.searchParams.get('registerError') ?? ''];
+---
+<BaseLayout title="Přihlášení" noindex>
+  <section class="auth-panel">
+    <p class="eyebrow">Účet</p>
+    <h1>{user ? `Přihlášen jako ${user.displayName}` : 'Přihlášení'}</h1>
+    {user ? (
+      <><p>Role: <strong>{user.role}</strong></p><div class="account-actions">{canEditRole(user.role) && <a class="button button-primary" href="/editor/">Editor receptů</a>}{user.role === 'ADMIN' && <a class="button button-quiet" href="/admin/">Správa uživatelů</a>}<form method="post" action="/auth/logout"><button class="button button-quiet">Odhlásit se</button></form></div></>
+    ) : (
+      <div class="auth-forms">
+        <form method="post" action="/auth/login" class="account-form">
+          <h2>Přihlášení</h2>
+          {loginError && <p class="form-error" role="alert">{loginError}</p>}
+          <input type="hidden" name="returnTo" value={returnTo} />
+          <label>E-mail<input name="email" type="email" autocomplete="email" maxlength="254" required /></label>
+          <label>Heslo<input name="password" type="password" autocomplete="current-password" maxlength="128" required /></label>
+          <button class="button button-primary">Přihlásit se</button>
+        </form>
+        <form method="post" action="/auth/register" class="account-form">
+          <h2>Nový účet</h2>
+          {registerError && <p class="form-error" role="alert">{registerError}</p>}
+          <p>Nový účet získá roli USER.</p>
+          <input type="hidden" name="returnTo" value={returnTo} />
+          <label>Jméno<input name="name" autocomplete="name" maxlength="100" required /></label>
+          <label>E-mail<input name="email" type="email" autocomplete="email" maxlength="254" required /></label>
+          <label>Heslo <small>alespoň 15 znaků</small><input name="password" type="password" autocomplete="new-password" minlength="15" maxlength="128" required /></label>
+          <label>Heslo znovu<input name="passwordConfirmation" type="password" autocomplete="new-password" minlength="15" maxlength="128" required /></label>
+          <button class="button button-primary">Vytvořit účet</button>
+        </form>
+      </div>
+    )}
+  </section>
+</BaseLayout>

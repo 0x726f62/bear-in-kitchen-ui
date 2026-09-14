@@ -1,8 +1,9 @@
 # Bear in the Kitchen
 
 A Czech recipe website built with Astro 7, Tailwind CSS 4, and strict
-TypeScript. Astro generates complete HTML pages and optimized responsive images;
-Cloudflare Workers Static Assets serves the production build.
+TypeScript. Cloudflare Workers renders the D1-backed recipe catalog and account
+pages on demand; stable informational pages and assets are generated at build
+time.
 
 ## Development
 
@@ -22,13 +23,8 @@ npm run build
 npm run test:build
 ```
 
-Development includes draft recipes. Production builds publish only recipes with
-`draft: false`. To inspect the generated draft pages explicitly:
-
-```sh
-INCLUDE_DRAFTS=true npm run build
-INCLUDE_DRAFTS=true npm run test:build
-```
+Run the local D1 migrations before opening database-backed pages. Draft recipes
+are visible only while signed in as an editor or administrator.
 
 ## Project structure
 
@@ -54,27 +50,47 @@ Public routes are `/`, `/recipe/<id>/`, `/tricks-and-tips/`, `/about-me/`, and
 ingredient filters. A recipe must contain every selected ingredient. Filters
 remain in the URL so a result can be bookmarked or shared.
 
+## Accounts and roles
+
+Visitors can register with an e-mail address and password. Registration creates
+a D1 user with the `USER` role. Passwords are salted and hashed; plaintext
+passwords are never stored. Roles are enforced in the Worker endpoints as well
+as reflected in the UI:
+
+- `USER` can read the site.
+- `EDITOR` can open `/editor/` and add recipes, ingredients, and tags.
+- `ADMIN` has editor access and can grant or remove `EDITOR` at `/admin/`.
+
+The application never grants `ADMIN`. To bootstrap an administrator, sign in
+once and then update that existing account manually:
+
+```sh
+npx wrangler d1 execute bear-in-kitchen --remote \
+  --command "UPDATE users SET role = 'ADMIN' WHERE email = 'you@example.com'"
+```
+
+Apply the D1 migrations before first use:
+
+```sh
+npx wrangler d1 migrations apply bear-in-kitchen --remote
+```
+
 ## Recipe content
 
-Each file in `src/content/recipes/` defines one recipe. Its filename is the
-stable recipe ID and URL segment. The schema in `src/content.config.ts` validates
-all content and prevents an incomplete recipe from being published.
+The files in `src/content/recipes/` contain the original imported recipes. Their
+filenames are stable recipe IDs, and the content schema validates this source
+data during the build. Live recipe fields, ingredients, steps, and tags are read
+from D1.
 
 Each recipe ingredient references one entry in `src/data/ingredients.json` by
 `ingredientId`. The recipe owns the quantity, unit, display wording, and order;
 the catalog owns the canonical ingredient identity and searchable aliases. This
 allows reliable reverse searches despite Czech grammatical forms.
 
-To add a recipe:
-
-1. Add its canonical ingredients to `src/data/ingredients.json` when necessary.
-2. Create a JSON document in `src/content/recipes/`.
-3. Put photographs in `src/assets/recipes/` and reference them relative to the
-   recipe document.
-4. Review the content, set `draft` to `false`, and run the validation commands.
-
-Published recipe pages include Recipe JSON-LD. Draft pages use `noindex` and do
-not emit structured recipe data.
+Editors add recipes and catalog entries at `/editor/`. New recipes use a photo
+placeholder for now; the local photographs under `src/assets/recipes/` remain
+attached to the imported recipes. Published recipe pages include Recipe JSON-LD.
+Draft pages use `noindex`, omit structured recipe data, and require editor access.
 
 ## Cloudflare data
 
@@ -82,21 +98,20 @@ The `bear-in-kitchen` D1 database contains the normalized recipe model. The
 `ingredients` table stores canonical ingredients once, and
 `recipe_ingredients` stores recipe-specific amounts and wording.
 
-The files in `migrations/` are immutable after they have been applied. For a
-reviewable snapshot of current local content, generate `database/seed.sql`:
+The files in `migrations/` are immutable after they have been applied. D1 is the
+runtime source for the recipe catalog, recipe pages, users, roles, and editor
+changes. The JSON documents and local photographs remain the reviewable source
+for the original imported recipes and their optimized images.
+
+To regenerate a reviewable SQL snapshot of the original local content, run:
 
 ```sh
 npm run db:generate-seed
 ```
 
-After reviewing the generated SQL, update the remote database with:
-
-```sh
-npm run db:seed
-```
-
-Local content remains the static build source. D1 provides a normalized copy for
-future server-side features while keeping current pages fast and reproducible.
+Do not execute that snapshot against a live authoring database: it intentionally
+replaces recipe data. New environments receive the original content through the
+checked-in migrations.
 
 R2 storage is optional. Once it is enabled for the account, upload the original
 recipe photographs under the `recipes/` object prefix with:

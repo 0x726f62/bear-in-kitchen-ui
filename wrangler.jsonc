@@ -1,9 +1,11 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "bear-in-kitchen",
+  "main": "@astrojs/cloudflare/entrypoints/server",
   "compatibility_date": "2026-09-13",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   },

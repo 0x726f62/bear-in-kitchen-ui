@@ -1,0 +1,32 @@
+---
+export const prerender = false;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCurrentUser } from '../../lib/server/auth';
+import { getDb, type Role } from '../../lib/server/db';
+const user = await getCurrentUser(Astro.request, getDb());
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+if (!user) return Astro.redirect('/login/?returnTo=%2Fadmin%2F');
+if (user.role !== 'ADMIN') return new Response('Forbidden', { status: 403 });
+const result = await getDb().prepare('SELECT id, email, display_name, role, created_at FROM users ORDER BY display_name COLLATE NOCASE').all<{ id: string; email: string; display_name: string; role: Role; created_at: string }>();
+---
+<BaseLayout title="Správa uživatelů" noindex>
+  <header class="page-intro admin-heading"><div><p class="eyebrow">Administrace</p><h1>Uživatelé a role</h1></div><a class="button button-quiet" href="/editor/">Editor receptů</a></header>
+  <div class="user-list content-card">
+    {result.results.map(account => <div class="user-row" data-user-id={account.id}>
+      <div><strong>{account.display_name}</strong><small>{account.email}</small></div>
+      {account.role === 'ADMIN' ? <span class="role-badge">ADMIN</span> : <label>Role<select aria-label={`Role uživatele ${account.display_name}`}><option selected={account.role === 'USER'}>USER</option><option selected={account.role === 'EDITOR'}>EDITOR</option></select></label>}
+      <p class="form-status" role="status"></p>
+    </div>)}
+  </div>
+  <p class="admin-note">Role ADMIN se záměrně nedá přidělit v aplikaci. Přiděluje se pouze ručně v D1.</p>
+</BaseLayout>
+<script>
+  for (const select of document.querySelectorAll<HTMLSelectElement>('.user-row select')) select.addEventListener('change', async () => {
+    const row = select.closest<HTMLElement>('.user-row')!;
+    const status = row.querySelector<HTMLElement>('.form-status')!;
+    const response = await fetch(`/api/admin/users/${encodeURIComponent(row.dataset.userId!)}`, { method: 'PATCH', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ role: select.value }) });
+    const result = await response.json();
+    status.textContent = response.ok ? 'Uloženo' : result.error;
+    status.classList.toggle('form-error', !response.ok);
+  });
+</script>

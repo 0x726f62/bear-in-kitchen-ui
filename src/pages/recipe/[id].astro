@@ -1,15 +1,26 @@
 ---
+export const prerender = false;
 import { Image } from 'astro:assets';
-import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import { getRecipes } from '../../lib/recipes';
 import { categoryIcon, stepIcons } from '../../lib/recipe-icons';
+import { getCurrentUser } from '../../lib/server/auth';
+import { canEdit, getDb } from '../../lib/server/db';
+import { getDatabaseRecipe } from '../../lib/server/recipes';
 
-export async function getStaticPaths() {
-  return (await getRecipes()).map(recipe => ({ params: { id: recipe.id }, props: { recipe } }));
-}
-interface Props { recipe: CollectionEntry<'recipes'> }
-const { recipe: { data } } = Astro.props;
+const id = Astro.params.id;
+if (!id) return new Response('Not found', { status: 404 });
+const recipe = await getDatabaseRecipe(getDb(), id);
+if (!recipe) return new Response('Not found', { status: 404 });
+const user = recipe.draft ? await getCurrentUser(Astro.request, getDb()) : null;
+if (recipe.draft && (!user || !canEdit(user.role))) return new Response('Not found', { status: 404 });
+Astro.response.headers.set('Cache-Control', recipe.draft ? 'private, no-store' : 'public, max-age=60');
+const contentRecipe = (await getCollection('recipes')).find(entry => entry.id === id);
+const data = {
+  ...recipe,
+  photo: contentRecipe?.data.photo,
+  steps: recipe.steps.map((item, index) => ({ ...item, photo: contentRecipe?.data.steps[index]?.photo })),
+};
 let step = 0;
 const steps = data.steps.map(item => ({ ...item, number: item.tip ? undefined : ++step }));
 const structuredData = {

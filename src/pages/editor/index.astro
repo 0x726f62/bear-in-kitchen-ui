@@ -1,0 +1,99 @@
+---
+export const prerender = false;
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCurrentUser } from '../../lib/server/auth';
+import { canEdit, getDb } from '../../lib/server/db';
+const user = await getCurrentUser(Astro.request, getDb());
+Astro.response.headers.set('Cache-Control', 'private, no-store');
+if (!user) return Astro.redirect('/login/?returnTo=%2Feditor%2F');
+if (!canEdit(user.role)) return new Response('Forbidden', { status: 403 });
+const [ingredientResult, tagResult] = await Promise.all([
+  getDb().prepare('SELECT id, name FROM ingredients ORDER BY name COLLATE NOCASE').all<{ id: string; name: string }>(),
+  getDb().prepare('SELECT id, name FROM tags ORDER BY name COLLATE NOCASE').all<{ id: string; name: string }>(),
+]);
+const ingredients = ingredientResult.results;
+const tags = tagResult.results;
+---
+<BaseLayout title="Editor" noindex>
+  <header class="page-intro admin-heading">
+    <div><p class="eyebrow">Editor</p><h1>Nový recept</h1><p class="lead">Přihlášen jako {user.displayName} ({user.role}).</p></div>
+    {user.role === 'ADMIN' && <a class="button button-quiet" href="/admin/">Správa uživatelů</a>}
+  </header>
+
+  <div class="editor-layout">
+    <form id="recipe-form" class="editor-form content-card">
+      <h2>Recept</h2>
+      <div class="form-grid two-columns">
+        <label>Název *<input name="title" required maxlength="160" /></label>
+        <label>Kategorie *<input name="category" required maxlength="80" list="categories" /></label>
+        <datalist id="categories"><option value="dezerty"></option><option value="hlavní chody"></option><option value="saláty"></option><option value="polévky"></option></datalist>
+      </div>
+      <label>Popis *<textarea name="description" required maxlength="3000" rows="4"></textarea></label>
+      <div class="form-grid three-columns">
+        <label>Počet porcí *<input name="serves" type="number" min="1" required /></label>
+        <label>Čas v minutách *<input name="minutes" type="number" min="1" required /></label>
+        <label>Obtížnost *<select name="difficulty" required><option>Snadné</option><option>Střední</option><option>Náročné</option></select></label>
+      </div>
+      <label>Popis hlavní fotografie<input name="photoAlt" maxlength="200" placeholder="Doplní se automaticky, pokud zůstane prázdný" /></label>
+      <label>Štítky<select name="tags" multiple size="4">{tags.map(tag => <option value={tag.name}>{tag.name}</option>)}</select></label>
+
+      <fieldset><legend>Ingredience</legend><div id="ingredient-rows"></div><button class="button button-quiet" id="add-ingredient-row" type="button">+ Přidat řádek</button></fieldset>
+      <fieldset><legend>Postup</legend><div id="step-rows"></div><button class="button button-quiet" id="add-step-row" type="button">+ Přidat krok</button></fieldset>
+      <label class="check-label"><input name="draft" type="checkbox" checked /> Uložit jako koncept</label>
+      <p class="form-status" id="recipe-status" role="status"></p>
+      <button class="button button-primary" type="submit">Uložit recept</button>
+    </form>
+
+    <aside class="catalog-tools">
+      <form class="catalog-form content-card" data-endpoint="/api/editor/ingredients">
+        <h2>Nová ingredience</h2><label>Název *<input name="name" required maxlength="120" /></label>
+        <p class="form-status" role="status"></p><button class="button button-primary">Přidat ingredienci</button>
+      </form>
+      <form class="catalog-form content-card" data-endpoint="/api/editor/tags">
+        <h2>Nový štítek</h2><label>Název *<input name="name" required maxlength="80" /></label>
+        <p class="form-status" role="status"></p><button class="button button-primary">Přidat štítek</button>
+      </form>
+    </aside>
+  </div>
+
+  <template id="ingredient-row-template"><div class="repeater-row ingredient-row"><label>Ingredience *<select data-field="ingredientId" required><option value="">Vyberte…</option>{ingredients.map(item => <option value={item.id}>{item.name}</option>)}</select></label><label>Název v receptu *<input data-field="name" required maxlength="160" /></label><label>Množství<input data-field="quantity" type="number" min="0" step="any" /></label><label>Jednotka<input data-field="unit" maxlength="40" /></label><button class="remove-row" type="button" aria-label="Odebrat ingredienci">×</button></div></template>
+  <template id="step-row-template"><div class="repeater-row step-row"><label>Text kroku *<textarea data-field="content" required maxlength="5000" rows="3"></textarea></label><label class="check-label"><input data-field="tip" type="checkbox" /> Tip</label><button class="remove-row" type="button" aria-label="Odebrat krok">×</button></div></template>
+</BaseLayout>
+
+<script>
+  const addRow = (containerId: string, templateId: string) => {
+    const container = document.querySelector(`#${containerId}`)!;
+    const fragment = (document.querySelector<HTMLTemplateElement>(`#${templateId}`)!).content.cloneNode(true) as DocumentFragment;
+    fragment.querySelector('.remove-row')!.addEventListener('click', event => (event.currentTarget as HTMLElement).closest('.repeater-row')?.remove());
+    container.append(fragment);
+  };
+  document.querySelector('#add-ingredient-row')?.addEventListener('click', () => addRow('ingredient-rows', 'ingredient-row-template'));
+  document.querySelector('#add-step-row')?.addEventListener('click', () => addRow('step-rows', 'step-row-template'));
+  addRow('ingredient-rows', 'ingredient-row-template');
+  addRow('step-rows', 'step-row-template');
+
+  for (const form of document.querySelectorAll<HTMLFormElement>('.catalog-form')) form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const response = await fetch(form.dataset.endpoint!, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) });
+    const result = await response.json();
+    status.textContent = response.ok ? 'Uloženo. Obnovuji nabídky…' : result.error;
+    status.classList.toggle('form-error', !response.ok);
+    if (response.ok) location.reload();
+  });
+
+  document.querySelector<HTMLFormElement>('#recipe-form')!.addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget as HTMLFormElement;
+    const value = Object.fromEntries(new FormData(form));
+    const readRows = (selector: string) => [...document.querySelectorAll<HTMLElement>(selector)].map(row => Object.fromEntries([...row.querySelectorAll<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>('[data-field]')].map(field => [field.dataset.field!, field.type === 'checkbox' ? (field as HTMLInputElement).checked : field.value])));
+    const tags = [...form.querySelector<HTMLSelectElement>('[name="tags"]')!.selectedOptions].map(option => option.value);
+    const payload = { ...value, draft: form.querySelector<HTMLInputElement>('[name="draft"]')!.checked, tags, ingredients: readRows('.ingredient-row'), steps: readRows('.step-row') };
+    const status = document.querySelector<HTMLElement>('#recipe-status')!;
+    const response = await fetch('/api/editor/recipes', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(payload) });
+    const result = await response.json();
+    status.textContent = response.ok ? `Recept byl uložen pod ID ${result.id}.` : result.error;
+    status.classList.toggle('form-error', !response.ok);
+    if (response.ok) { form.reset(); document.querySelector('#ingredient-rows')!.replaceChildren(); document.querySelector('#step-rows')!.replaceChildren(); addRow('ingredient-rows', 'ingredient-row-template'); addRow('step-rows', 'step-row-template'); }
+  });
+</script>
