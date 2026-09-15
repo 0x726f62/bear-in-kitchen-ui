@@ -1,4 +1,5 @@
-const ITERATIONS = 600_000;
+// Cloudflare Workers supports PBKDF2 iteration counts up to 100,000.
+const ITERATIONS = 100_000;
 const MIN_LENGTH = 15;
 const MAX_LENGTH = 128;
 
@@ -33,7 +34,7 @@ export async function hashPassword(password: string): Promise<{ hash: string; sa
 }
 
 export async function verifyPassword(password: string, expectedHash: string, salt: string, iterations: number): Promise<boolean> {
-  if (!Number.isInteger(iterations) || iterations < 1 || iterations > 2_000_000) return false;
+  if (!Number.isInteger(iterations) || iterations < 1 || iterations > ITERATIONS) return false;
   let actual: Uint8Array;
   let expected: Uint8Array;
   try {
